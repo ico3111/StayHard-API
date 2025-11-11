@@ -1,24 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Application.Domains.Workout.Dtos;
+using Application.Domains.Workout.Interfaces;
 
 namespace StayHard.Controllers
 {
-
     [ApiController]
     [Route("[controller]")]
     public class StayHardController : ControllerBase
     {
-        private readonly StayHard
+        private readonly IWorkoutService _workoutService;
+
+        // O serviço é injetado via construtor
+        public StayHardController(IWorkoutService workoutService)
+        {
+            _workoutService = workoutService;
+        }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public ActionResult<WorkoutDto> GetWorkout()
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            var resposta = _workoutService.GetWorkout();
+            return Ok(resposta);
         }
     }
 }

@@ -1,6 +1,0 @@
-@StayHard_HostAddress = http://localhost:5075
-
-GET {{StayHard_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
