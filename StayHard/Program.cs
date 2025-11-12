@@ -1,21 +1,27 @@
-using Application.Domains.Workout.Interfaces;
-using Application.Domains.Workout.Services;
+using Microsoft.EntityFrameworkCore;
+using StayHard.Application.Interfaces;
+using StayHard.Application.Services;
+using StayHard.Domain.Interfaces;
+using StayHard.Infrastructure.Data;
+using StayHard.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
 
+// Conexão com MySQL
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
+    ));
+
+// Injeção de dependências
 builder.Services.AddScoped<IWorkoutService, WorkoutService>();
+builder.Services.AddScoped<IWorkoutRepository, WorkoutRepository>();
 
 var app = builder.Build();
-
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
 
 app.MapControllers();
 
