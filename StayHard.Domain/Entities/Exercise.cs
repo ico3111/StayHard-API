@@ -1,19 +1,11 @@
 ﻿namespace StayHard.Domain.Entities
 {
-    public class Exercise
+    public class Exercise(string name, int repetitions, int sets, int workoutId)
     {
         public int Id { get; private set; }
-        public string Name { get; private set; } = string.Empty;
-        public int Repetitions { get; private set; }
-        public int Sets { get; private set; }
-
-        protected Exercise() { }
-
-        public Exercise(string name, int repetitions, int sets)
-        {
-            Name = name;
-            Repetitions = repetitions;
-            Sets = sets;
-        }
+        public string Name { get; private set; } = name;
+        public int Repetitions { get; private set; } = repetitions;
+        public int Sets { get; private set; } = sets;
+        public int WorkoutId { get; set; } = workoutId;
     }
 }

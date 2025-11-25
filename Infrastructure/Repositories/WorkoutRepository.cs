@@ -1,34 +1,71 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dapper;
+using Microsoft.Extensions.Configuration;
+using MySqlConnector;
 using StayHard.Domain.Entities;
 using StayHard.Domain.Interfaces;
-using StayHard.Infrastructure.Data;
 
-namespace StayHard.Infrastructure.Repositories
+public class WorkoutRepository(IConfiguration config) : IWorkoutRepository
 {
-    public class WorkoutRepository : IWorkoutRepository
+    private readonly string _conn = config.GetConnectionString("DefaultConnection");
+
+    public async Task<Workout?> GetByIdAsync(int id)
     {
-        private readonly AppDbContext _context;
+        using var db = new MySqlConnection(_conn);
 
-        public WorkoutRepository(AppDbContext context)
+        var sqlWorkout = "SELECT * FROM Workouts WHERE Id = @id;";
+        var sqlExercises = "SELECT * FROM Exercises WHERE WorkoutId = @id;";
+
+        var workout = await db.QueryFirstOrDefaultAsync<Workout>(sqlWorkout, new { id });
+
+        if (workout != null)
+            workout.Exercises = (await db.QueryAsync<Exercise>(sqlExercises, new { id })).ToList();
+
+        return workout;
+    }
+
+    public async Task<IEnumerable<Workout>> GetByStudentAsync(int studentId)
+    {
+        using var db = new MySqlConnection(_conn);
+
+
+        var sqlStudents = "SELECT * FROM Workouts WHERE StudentId = @studentId";
+        var sqlExercises = "SELECT * FROM Exercises WHERE WorkoutId = @id";
+
+        var workouts = (await db.QueryAsync<Workout>(
+            sqlStudents,
+            new { studentId }
+        )).ToList();
+
+        var exercises = (await db.QueryAsync<Exercise>(
+            sqlStudents,
+            new { studentId }
+        )).ToList();
+
+
+        return workouts;
+    }
+
+    public async Task AddAsync(Workout workout)
+    {
+        using var db = new MySqlConnection(_conn);
+
+        var sql = "INSERT INTO Workouts (Name, StudentId)" +
+                       "VALUES (@Name, @StudentId);" +
+                       "SELECT LAST_INSERT_ID();";
+
+        var id = await db.ExecuteScalarAsync<int>(sql, workout);
+
+        if (workout.Exercises != null)
         {
-            _context = context;
-        }
-
-        public async Task<Workout?> GetByIdAsync(int id)
-            => await _context.Workouts
-                .Include(w => w.Exercises)
-                .FirstOrDefaultAsync(w => w.Id == id);
-
-        public async Task<IEnumerable<Workout>> GetByStudentAsync(int studentId)
-            => await _context.Workouts
-                .Include(w => w.Exercises)
-                .Where(w => w.StudentId == studentId)
-                .ToListAsync();
-
-        public async Task AddAsync(Workout workout)
-        {
-            _context.Workouts.Add(workout);
-            await _context.SaveChangesAsync();
+            foreach (var exercise in workout.Exercises)
+            {
+                exercise.WorkoutId = id;
+                await db.ExecuteAsync(
+                    @"INSERT INTO Exercises (Name, Repetitions, Sets)
+                      VALUES (@Name, @Repetitions, @Sets, @WorkoutId)",
+                    exercise
+                );
+            }
         }
     }
 }

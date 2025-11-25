@@ -3,7 +3,6 @@ using StayHard.Application.Interfaces;
 using StayHard.Application.Services;
 using StayHard.Domain.Interfaces;
 using StayHard.Infrastructure.Data;
-using StayHard.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
