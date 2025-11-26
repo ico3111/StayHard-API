@@ -5,14 +5,9 @@ using StayHard.Domain.Interfaces;
 
 namespace StayHard.Application.Services;
 
-public class WorkoutService : IWorkoutService
+public class WorkoutService(IWorkoutRepository repository) : IWorkoutService
 {
-    private readonly IWorkoutRepository _repository;
-
-    public WorkoutService(IWorkoutRepository repository)
-    {
-        _repository = repository;
-    }
+    private readonly IWorkoutRepository _repository = repository;
 
     public async Task<Workout> CreateWorkoutAsync(WorkoutDto dto)
     {
@@ -21,8 +16,13 @@ public class WorkoutService : IWorkoutService
         return workout;
     }
 
-    public async Task<IEnumerable<Workout>> GetStudentWorkoutsAsync(int studentId)
+    public async Task<IEnumerable<Workout>> GetUserWorkoutsAsync(int userId)
     {
-        return await _repository.GetByStudentAsync(studentId);
+        return await _repository.GetByUserAsync(userId);
+    }
+
+    public async Task<Workout?> GetWorkoutByIdAsync(int id)
+    {
+        return await _repository.GetByIdAsync(id);
     }
 }

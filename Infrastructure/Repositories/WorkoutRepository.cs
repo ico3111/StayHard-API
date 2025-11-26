@@ -1,71 +1,58 @@
 ﻿using Dapper;
-using Microsoft.Extensions.Configuration;
-using MySqlConnector;
 using StayHard.Domain.Entities;
 using StayHard.Domain.Interfaces;
+using System.Data;
 
-public class WorkoutRepository(IConfiguration config) : IWorkoutRepository
+namespace StayHard.Infrastructure.Repositories;
+
+public class WorkoutRepository(IDbConnection db) : IWorkoutRepository
 {
-    private readonly string _conn = config.GetConnectionString("DefaultConnection");
+    private readonly IDbConnection _db = db;
 
     public async Task<Workout?> GetByIdAsync(int id)
     {
-        using var db = new MySqlConnection(_conn);
-
-        var sqlWorkout = "SELECT * FROM Workouts WHERE Id = @id;";
-        var sqlExercises = "SELECT * FROM Exercises WHERE WorkoutId = @id;";
+        var sqlWorkout = "SELECT * FROM Workouts WHERE id = @Id;";
+        var sqlExercises = "SELECT * FROM Exercises WHERE workoutId = @Id;";
 
         var workout = await db.QueryFirstOrDefaultAsync<Workout>(sqlWorkout, new { id });
+        if (workout == null)
+            return null;
 
-        if (workout != null)
-            workout.Exercises = (await db.QueryAsync<Exercise>(sqlExercises, new { id })).ToList();
+        var exercises = (await _db.QueryAsync<Exercise>(sqlExercises, new { id })).ToList();
+        workout.Exercises = exercises;
 
         return workout;
     }
 
-    public async Task<IEnumerable<Workout>> GetByStudentAsync(int studentId)
+    public async Task<IEnumerable<Workout>> GetByUserAsync(int userId)
     {
-        using var db = new MySqlConnection(_conn);
+        var sqlUsers = "SELECT * FROM workouts WHERE userId = @UserId;";
+        var sqlExercises = "SELECT * FROM exercises WHERE workoutId = @WorkoutId;";
 
-
-        var sqlStudents = "SELECT * FROM Workouts WHERE StudentId = @studentId";
-        var sqlExercises = "SELECT * FROM Exercises WHERE WorkoutId = @id";
-
-        var workouts = (await db.QueryAsync<Workout>(
-            sqlStudents,
-            new { studentId }
+        var workouts = (await _db.QueryAsync<Workout>(
+            sqlUsers,
+            new { userId }
         )).ToList();
 
-        var exercises = (await db.QueryAsync<Exercise>(
-            sqlStudents,
-            new { studentId }
-        )).ToList();
+        if (workouts == null) return Enumerable.Empty<Workout>();
 
+        foreach (var workout in workouts)
+        {
+            workout.Exercises = (await _db.QueryAsync<Exercise>(
+                sqlExercises,
+                new { workoutId = workout.Id }
+            )).ToList();
+        }
 
         return workouts;
     }
 
     public async Task AddAsync(Workout workout)
     {
-        using var db = new MySqlConnection(_conn);
+        var sql = @"INSERT INTO Workouts (name, userId)
+                         VALUES (@Name, @UserId);";
 
-        var sql = "INSERT INTO Workouts (Name, StudentId)" +
-                       "VALUES (@Name, @StudentId);" +
-                       "SELECT LAST_INSERT_ID();";
-
-        var id = await db.ExecuteScalarAsync<int>(sql, workout);
-
-        if (workout.Exercises != null)
-        {
-            foreach (var exercise in workout.Exercises)
-            {
-                exercise.WorkoutId = id;
-                await db.ExecuteAsync(
-                    @"INSERT INTO Exercises (Name, Repetitions, Sets)
-                      VALUES (@Name, @Repetitions, @Sets, @WorkoutId)",
-                    exercise
-                );
-            }
-        }
+        await _db.ExecuteAsync(sql, workout);
     }
+
 }

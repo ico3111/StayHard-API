@@ -25,7 +25,7 @@ public class WorkoutController : ControllerBase
     [HttpGet("{studentId}")]
     public async Task<IActionResult> GetByStudent(int studentId)
     {
-        var workouts = await _service.GetStudentWorkoutsAsync(studentId);
+        var workouts = await _service.GetUserWorkoutsAsync(studentId);
         return Ok(workouts);
     }
 }
