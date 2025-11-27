@@ -30,11 +30,24 @@ public class ExerciseRepository(IDbConnection db) : IExerciseRepository
         return exercises;
     }
 
-    public async Task AddAsync(Exercise exercise)
+    public async Task<int> AddAsync(Exercise exercise)
     {
-        var sqlExercise = "INSERT INTO exercises (name, sets, reps, workoutId) VALUES (@Name, @Sets, @Reps, @WorkoutId);";
+        var sqlExercise = @"INSERT INTO exercises (name, sets, reps, workoutId) 
+                            VALUES (@Name, @Sets, @Reps, @WorkoutId);
+                            SELECT LAST_INSERT_ID();";
 
-        await _db.ExecuteAsync(sqlExercise, exercise);
+        return await _db.QueryFirstOrDefaultAsync<int>(sqlExercise, exercise);
+    }
+
+    public async Task<IEnumerable<Exercise>> GetAllAsync()
+    {
+        var sqlExercise = "SELECT * FROM exercises;";
+
+        var exercises = (await _db.QueryAsync<Exercise>(
+            sqlExercise
+        )).ToList() ;
+
+        return exercises;
     }
 
 }

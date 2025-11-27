@@ -15,15 +15,22 @@ public class WorkoutController : ControllerBase
         _service = service;
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<IActionResult> CreateWorkout([FromBody] WorkoutDto dto)
     {
         var workout = await _service.CreateWorkoutAsync(dto);
         return Ok(workout);
     }
 
-    [HttpGet("{studentId}")]
-    public async Task<IActionResult> GetByStudent(int studentId)
+    [HttpGet("user/{userId}")]
+    public async Task<IActionResult> GetByUser(int userId)
+    {
+        var workouts = await _service.GetUserWorkoutsAsync(userId);
+        return Ok(workouts);
+    }
+
+    [HttpGet("id/{studentId}")]
+    public async Task<IActionResult> GetById(int studentId)
     {
         var workouts = await _service.GetUserWorkoutsAsync(studentId);
         return Ok(workouts);

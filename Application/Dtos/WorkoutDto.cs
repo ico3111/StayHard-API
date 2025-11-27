@@ -3,5 +3,5 @@
 public class WorkoutDto
 {
     public string Name { get; set; } = string.Empty;
-    public int StudentId { get; set; }
+    public int UserId { get; set; }
 }

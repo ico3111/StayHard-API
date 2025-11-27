@@ -12,11 +12,12 @@ public class ExerciseService(IExerciseRepository repository) : IExerciseService
     public async Task<Exercise> CreateExerciseAsync(ExerciseDto dto)
     {
         var exercise = new Exercise(dto.Name, dto.Sets, dto.Reps, dto.WorkoutId);
-        await _repository.AddAsync(exercise);
+        var id = await _repository.AddAsync(exercise);
+        exercise.Id = id;
         return exercise;
     }
 
-    public async Task<IEnumerable<Exercise>> GetExercisesByWorkoutIdAsync(int workoutId)
+    public async Task<IEnumerable<Exercise?>> GetExercisesByWorkoutIdAsync(int workoutId)
     {
         return await _repository.GetExercisesByWorkoutIdAsync(workoutId);
     }
@@ -25,4 +26,9 @@ public class ExerciseService(IExerciseRepository repository) : IExerciseService
     {
         return await _repository.GetByIdAsync(id);
     }
+    public async Task<IEnumerable<Exercise?>> GetAllAsync()
+    {
+        return await _repository.GetAllAsync();
+    }
+
 }

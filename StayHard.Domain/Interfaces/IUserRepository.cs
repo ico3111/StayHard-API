@@ -4,8 +4,8 @@ namespace StayHard.Domain.Interfaces;
 
 public interface IUserRepository
 {
-    Task<Workout?> GetByIdAsync(int id);
-    Task<IEnumerable<Workout>> GetByStudentAsync(int studentId);
-    Task AddAsync(Workout workout);
+    Task<User?> GetByIdAsync(int id);
+    Task<User?> GetByEmailAsync(string email);
+    Task AddAsync(User user);
 }
 

@@ -11,7 +11,7 @@ public class WorkoutService(IWorkoutRepository repository) : IWorkoutService
 
     public async Task<Workout> CreateWorkoutAsync(WorkoutDto dto)
     {
-        var workout = new Workout(dto.Name, dto.StudentId);
+        var workout = new Workout(dto.Name, dto.UserId);
         await _repository.AddAsync(workout);
         return workout;
     }
