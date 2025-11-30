@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 26/11/2025 às 05:46
+-- Tempo de geração: 30/11/2025 às 05:27
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -29,7 +29,6 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `exercises` (
   `id` int(11) NOT NULL,
-  `workoutId` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `sets` int(11) NOT NULL,
   `reps` int(11) NOT NULL
@@ -39,8 +38,14 @@ CREATE TABLE `exercises` (
 -- Despejando dados para a tabela `exercises`
 --
 
-INSERT INTO `exercises` (`id`, `workoutId`, `name`, `sets`, `reps`) VALUES
-(2, 8, 'Supino', 3, 12);
+INSERT INTO `exercises` (`id`, `name`, `sets`, `reps`) VALUES
+(3, 'Supino', 3, 12),
+(4, 'Supino2', 3, 12),
+(5, 'Supino2', 3, 12),
+(6, 'Supino', 3000, 12000),
+(7, 'Supino', 3000, 12000),
+(8, 'Supino', 3000, 12000),
+(9, 'lev terra', 3000, 12000);
 
 -- --------------------------------------------------------
 
@@ -51,15 +56,19 @@ INSERT INTO `exercises` (`id`, `workoutId`, `name`, `sets`, `reps`) VALUES
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL
+  `email` varchar(100) NOT NULL,
+  `passwordHash` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`) VALUES
-(3, 'Enrico', 'enricodparolin@gmail.com');
+INSERT INTO `users` (`id`, `name`, `email`, `passwordHash`) VALUES
+(4, 'Ico', 'ico@gmail.com', '3e4c110da515b77076ccc68cdedf0700'),
+(5, 'Ico2', 'ico2@gmail.com', '3e4c110da515b77076ccc68cdedf0700'),
+(7, 'Ico23', 'ico32@gmail.com', '3e4c110da515b77076ccc68cdedf0700'),
+(8, 'Ico223', 'ico322@gmail.com', '3e4c110da515b77076ccc68cdedf0700');
 
 -- --------------------------------------------------------
 
@@ -78,7 +87,31 @@ CREATE TABLE `workouts` (
 --
 
 INSERT INTO `workouts` (`id`, `name`, `userId`) VALUES
-(8, 'treinao top', 3);
+(13, 'treinao top', 4),
+(14, 'treinao top', 4),
+(15, 'treinao top', 4);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `workout_exercise`
+--
+
+CREATE TABLE `workout_exercise` (
+  `id` int(11) NOT NULL,
+  `workoutId` int(11) NOT NULL,
+  `exerciseId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `workout_exercise`
+--
+
+INSERT INTO `workout_exercise` (`id`, `workoutId`, `exerciseId`) VALUES
+(1, 13, 6),
+(2, 13, 7),
+(3, 15, 8),
+(4, 15, 9);
 
 --
 -- Índices para tabelas despejadas
@@ -88,8 +121,7 @@ INSERT INTO `workouts` (`id`, `name`, `userId`) VALUES
 -- Índices de tabela `exercises`
 --
 ALTER TABLE `exercises`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `FK_Exercises_Workouts` (`workoutId`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Índices de tabela `users`
@@ -106,6 +138,14 @@ ALTER TABLE `workouts`
   ADD KEY `FK_Workouts_Users` (`userId`);
 
 --
+-- Índices de tabela `workout_exercise`
+--
+ALTER TABLE `workout_exercise`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `workoutId` (`workoutId`),
+  ADD KEY `exerciseId` (`exerciseId`);
+
+--
 -- AUTO_INCREMENT para tabelas despejadas
 --
 
@@ -113,35 +153,42 @@ ALTER TABLE `workouts`
 -- AUTO_INCREMENT de tabela `exercises`
 --
 ALTER TABLE `exercises`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de tabela `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de tabela `workouts`
 --
 ALTER TABLE `workouts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT de tabela `workout_exercise`
+--
+ALTER TABLE `workout_exercise`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Restrições para tabelas despejadas
 --
 
 --
--- Restrições para tabelas `exercises`
---
-ALTER TABLE `exercises`
-  ADD CONSTRAINT `FK_Exercises_Workouts` FOREIGN KEY (`workoutId`) REFERENCES `workouts` (`Id`) ON DELETE CASCADE;
-
---
 -- Restrições para tabelas `workouts`
 --
 ALTER TABLE `workouts`
   ADD CONSTRAINT `FK_Workouts_Users` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Restrições para tabelas `workout_exercise`
+--
+ALTER TABLE `workout_exercise`
+  ADD CONSTRAINT `workout_exercise_ibfk_1` FOREIGN KEY (`workoutId`) REFERENCES `workouts` (`id`),
+  ADD CONSTRAINT `workout_exercise_ibfk_2` FOREIGN KEY (`exerciseId`) REFERENCES `exercises` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
