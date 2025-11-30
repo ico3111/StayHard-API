@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using StayHard.Domain.Entities;
 using StayHard.Domain.Interfaces;
 using System.Data;
 
@@ -8,6 +7,15 @@ namespace StayHard.Infrastructure.Repositories;
 public class UserRepository(IDbConnection db) : IUserRepository
 {
     private readonly IDbConnection _db = db;
+
+    public async Task<int> AddAsync(User user)
+    {
+        var sqlUser = @"INSERT INTO users (name, email, passwordHash) 
+                             VALUES (@name, @email, @passwordHash);
+                             SELECT LAST_INSERT_ID();";
+
+        return await _db.QueryFirstOrDefaultAsync<int>(sqlUser, user);
+    }
 
     public async Task<User?> GetByIdAsync(int id)
     {
@@ -27,11 +35,13 @@ public class UserRepository(IDbConnection db) : IUserRepository
         return user;
     }
 
-    public async Task AddAsync(User user)
+    public async Task<IEnumerable<User?>> GetAllAsync()
     {
-        var sqlUser = "INSERT INTO users (name, email, passwordHash) VALUES (@name, @email, @passwordHash);";
+        var sqlUsers = "SELECT * FROM users";
 
-        await _db.ExecuteAsync(sqlUser, user);
+        var users = (await _db.QueryAsync<User>(sqlUsers)).ToList();
+
+        return users;
     }
 
 }

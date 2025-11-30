@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StayHard.Application.DTOs;
+using StayHard.Application.Commands;
 using StayHard.Application.Interfaces;
 
 namespace StayHard.WebApi.Controllers;
@@ -16,23 +16,30 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> CreateUser([FromBody] UserDto dto)
+    public async Task<IActionResult> CreateUser([FromBody] UserCommand command)
     {
-        var user = await _service.CreateUserAsync(dto);
+        var user = await _service.CreateUserAsync(command);
         return Ok(user);
     }
 
     [HttpGet("email/{email}")]
     public async Task<IActionResult> GetByEmail(string email)
     {
-        var workouts = await _service.GetUserByEmailAsync(email);
-        return Ok(workouts);
-    }
+        var user = await _service.GetUserByEmailAsync(email);
+        return Ok(user);
+    } 
     
     [HttpGet("id/{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var workouts = await _service.GetUserByIdAsync(id);
-        return Ok(workouts);
+        var user = await _service.GetUserByIdAsync(id);
+        return Ok(user);
+    }
+
+    [HttpGet("all")]
+    public async Task<IActionResult> GetAll()
+    {
+        var users = await _service.GetAllAsync();
+        return Ok(users);
     }
 }

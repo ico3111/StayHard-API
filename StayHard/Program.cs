@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using StayHard.Application.Interfaces;
 using StayHard.Application.Services;

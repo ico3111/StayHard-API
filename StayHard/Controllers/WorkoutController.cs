@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StayHard.Application.DTOs;
+using StayHard.Application.Commands;
 using StayHard.Application.Interfaces;
 
 namespace StayHard.WebApi.Controllers;
@@ -16,10 +16,17 @@ public class WorkoutController : ControllerBase
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> CreateWorkout([FromBody] WorkoutDto dto)
+    public async Task<IActionResult> CreateWorkout([FromBody] WorkoutCommand command)
     {
-        var workout = await _service.CreateWorkoutAsync(dto);
+        var workout = await _service.CreateWorkoutAsync(command);
         return Ok(workout);
+    }
+
+    [HttpPost("attach/{workoutId}/{exerciseId}")]
+    public async Task<IActionResult> AttachExercise(int workoutId, int exerciseId)
+    {
+        await _service.AttachExerciseAsync(workoutId, exerciseId);
+        return Ok();
     }
 
     [HttpGet("user/{userId}")]
@@ -29,10 +36,17 @@ public class WorkoutController : ControllerBase
         return Ok(workouts);
     }
 
-    [HttpGet("id/{studentId}")]
-    public async Task<IActionResult> GetById(int studentId)
+    [HttpGet("id/{id}")]
+    public async Task<IActionResult> GetById(int id)
     {
-        var workouts = await _service.GetUserWorkoutsAsync(studentId);
+        var workouts = await _service.GetWorkoutByIdAsync(id);
+        return Ok(workouts);
+    }
+
+    [HttpGet("all")]
+    public async Task<IActionResult> GetAll()
+    {
+        var workouts = await _service.GetAllAsync();
         return Ok(workouts);
     }
 }

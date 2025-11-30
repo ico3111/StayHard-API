@@ -1,4 +1,4 @@
-﻿using StayHard.Application.DTOs;
+﻿using StayHard.Application.Commands;
 using StayHard.Application.Interfaces;
 using StayHard.Domain.Entities;
 using StayHard.Domain.Interfaces;
@@ -9,12 +9,18 @@ public class WorkoutService(IWorkoutRepository repository) : IWorkoutService
 {
     private readonly IWorkoutRepository _repository = repository;
 
-    public async Task<Workout> CreateWorkoutAsync(WorkoutDto dto)
+    public async Task<Workout> CreateWorkoutAsync(WorkoutCommand dto)
     {
         var workout = new Workout(dto.Name, dto.UserId);
-        await _repository.AddAsync(workout);
+        var id =await _repository.AddAsync(workout);
+        workout.Id = id;
         return workout;
     }
+    public async Task AttachExerciseAsync(int workoutId, int exerciseId)
+    {
+        await _repository.AddExerciseAsync(workoutId, exerciseId);
+    }
+
 
     public async Task<IEnumerable<Workout>> GetUserWorkoutsAsync(int userId)
     {
@@ -25,4 +31,9 @@ public class WorkoutService(IWorkoutRepository repository) : IWorkoutService
     {
         return await _repository.GetByIdAsync(id);
     }
+    public async Task<IEnumerable<Workout?>> GetAllAsync()
+    {
+        return await _repository.GetAllAsync();
+    }
+
 }

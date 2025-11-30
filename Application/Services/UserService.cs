@@ -1,6 +1,5 @@
-﻿using StayHard.Application.DTOs;
+﻿using StayHard.Application.Commands;
 using StayHard.Application.Interfaces;
-using StayHard.Domain.Entities;
 using StayHard.Domain.Interfaces;
 
 namespace StayHard.Application.Services;
@@ -9,11 +8,12 @@ public class UserService(IUserRepository repository) : IUserService
 {
     private readonly IUserRepository _repository = repository;
 
-    public async Task<User> CreateUserAsync(UserDto dto)
+    public async Task<User> CreateUserAsync(UserCommand command)
     {
 
-        var user = new User(dto.Name, dto.Email, User.ReturnHashedPassword(dto.Password));
-        await _repository.AddAsync(user);
+        var user = new User(command.Name, command.Email, User.ReturnHashedPassword(command.Password));
+        var id = await _repository.AddAsync(user);
+        user.Id = id;
         return user;
     }
 
@@ -25,5 +25,10 @@ public class UserService(IUserRepository repository) : IUserService
     public async Task<User?> GetUserByIdAsync(int id)
     {
         return await _repository.GetByIdAsync(id);
+    }
+
+    public async Task<IEnumerable<User?>> GetAllAsync()
+    {
+        return await _repository.GetAllAsync();
     }
 }

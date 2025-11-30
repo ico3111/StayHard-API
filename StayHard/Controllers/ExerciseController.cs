@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StayHard.Application.DTOs;
+using StayHard.Application.Commands;
 using StayHard.Application.Interfaces;
 using StayHard.Domain.Entities;
 
@@ -12,7 +12,7 @@ public class ExerciseController(IExerciseService service) : ControllerBase
     private readonly IExerciseService _service = service;
 
     [HttpPost("create")]
-    public async Task<IActionResult> CreateExercise([FromBody] ExerciseDto dto)
+    public async Task<IActionResult> CreateExercise([FromBody] ExerciseCommand dto)
     {
         var exercise = await _service.CreateExerciseAsync(dto);
         return Ok(exercise);

@@ -8,6 +8,14 @@ namespace StayHard.Infrastructure.Repositories;
 public class ExerciseRepository(IDbConnection db) : IExerciseRepository
 {
     private readonly IDbConnection _db = db;
+    public async Task<int> AddAsync(Exercise exercise)
+    {
+        var sqlExercise = @"INSERT INTO exercises (name, sets, reps) 
+                            VALUES (@Name, @Sets, @Reps);
+                            SELECT LAST_INSERT_ID();";
+
+        return await _db.QueryFirstOrDefaultAsync<int>(sqlExercise, exercise);
+    }
 
     public async Task<Exercise?> GetByIdAsync(int id)
     {
@@ -28,15 +36,6 @@ public class ExerciseRepository(IDbConnection db) : IExerciseRepository
         )).ToList();
 
         return exercises;
-    }
-
-    public async Task<int> AddAsync(Exercise exercise)
-    {
-        var sqlExercise = @"INSERT INTO exercises (name, sets, reps, workoutId) 
-                            VALUES (@Name, @Sets, @Reps, @WorkoutId);
-                            SELECT LAST_INSERT_ID();";
-
-        return await _db.QueryFirstOrDefaultAsync<int>(sqlExercise, exercise);
     }
 
     public async Task<IEnumerable<Exercise>> GetAllAsync()
