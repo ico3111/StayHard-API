@@ -20,6 +20,17 @@ builder.Services.AddTransient<IDbConnection>(sp =>
     return conn;
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 // Injeção de dependências
 builder.Services.AddScoped<IWorkoutService, WorkoutService>();
 builder.Services.AddScoped<IWorkoutRepository, WorkoutRepository>();
@@ -30,6 +41,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
+app.UseCors(); 
+app.MapControllers();
 app.MapControllers();
 
 app.Run();
