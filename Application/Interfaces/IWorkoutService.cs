@@ -5,7 +5,7 @@ namespace StayHard.Application.Interfaces;
 
 public interface IWorkoutService
 {
-    Task<Workout> CreateWorkoutAsync(WorkoutCommand dto);
+    Task<Workout> CreateWorkoutAsync(WorkoutCommand command);
     Task AttachExerciseAsync(int workoutId, int exerciseId);
     Task<IEnumerable<Workout>> GetUserWorkoutsAsync(int userId);
     Task<Workout?> GetWorkoutByIdAsync(int id);

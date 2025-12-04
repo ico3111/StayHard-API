@@ -11,8 +11,8 @@ public class WorkoutRepository(IDbConnection db) : IWorkoutRepository
 
     public async Task<int> AddAsync(Workout workout)
     {
-        var sql = @"INSERT INTO Workouts (name, userId)
-                         VALUES (@Name, @UserId);
+        var sql = @"INSERT INTO Workouts (name, description, date, userId)
+                         VALUES (@Name, @Description, @Date, @UserId);
                          SELECT LAST_INSERT_ID();";
 
         return await _db.QueryFirstOrDefaultAsync<int>(sql, workout);

@@ -9,10 +9,10 @@ public class WorkoutService(IWorkoutRepository repository) : IWorkoutService
 {
     private readonly IWorkoutRepository _repository = repository;
 
-    public async Task<Workout> CreateWorkoutAsync(WorkoutCommand dto)
+    public async Task<Workout> CreateWorkoutAsync(WorkoutCommand command)
     {
-        var workout = new Workout(dto.Name, dto.UserId);
-        var id =await _repository.AddAsync(workout);
+        var workout = new Workout(command.Name, command.Description, command.Date, command.UserId);
+        var id = await _repository.AddAsync(workout);
         workout.Id = id;
         return workout;
     }
