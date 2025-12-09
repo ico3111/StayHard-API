@@ -5,35 +5,21 @@ using StayHard.Application.Domains.Workouts.Queries;
 
 namespace StayHard.Application.Domains.Exercises.Services;
 
-public class ExerciseService(IExerciseRepository exerciseRepository, IWorkoutRepository workoutRepository) : IExerciseService
+public class ExerciseService(IExerciseQueries ExerciseQueries, IWorkoutQueries WorkoutQueries) : IExerciseService
 {
-    private readonly IExerciseRepository _exerciseRepository = exerciseRepository;
-    private readonly IWorkoutRepository _workoutRepository = workoutRepository;
+    private readonly IExerciseQueries _ExerciseQueries = ExerciseQueries;
+    private readonly IWorkoutQueries _WorkoutQueries = WorkoutQueries;
 
     public async Task<Exercise> CreateExerciseAsync(ExerciseCommand command)
     {
         var exercise = new Exercise(command.Name, command.Sets, command.Reps);
-        var exerciseId = await _exerciseRepository.AddAsync(exercise);
+        var exerciseId = await _ExerciseQueries.AddAsync(exercise);
         if (command.WorkoutId != 0)
         {
-            await _workoutRepository.AddExerciseAsync(command.WorkoutId, exerciseId);
+            await _WorkoutQueries.AddExerciseAsync(command.WorkoutId, exerciseId);
         }
         exercise.Id = exerciseId;
         return exercise;
-    }
-
-    public async Task<IEnumerable<Exercise?>> GetExercisesByWorkoutIdAsync(int workoutId)
-    {
-        return await _exerciseRepository.GetExercisesByWorkoutIdAsync(workoutId);
-    }
-
-    public async Task<Exercise?> GetExerciseByIdAsync(int id)
-    {
-        return await _exerciseRepository.GetByIdAsync(id);
-    }
-    public async Task<IEnumerable<Exercise?>> GetAllAsync()
-    {
-        return await _exerciseRepository.GetAllAsync();
     }
 
 }

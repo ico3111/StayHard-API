@@ -8,6 +8,8 @@
 
 	<ItemGroup>
 		<Folder Include="Core\" />
+		<Folder Include="Domains\Users\Services\" />
+		<Folder Include="Domains\Workouts\Services\" />
 		<Folder Include="Infrastructure\" />
 		<PackageReference Include="MySqlConnector" Version="2.5.0" />
 		<PackageReference Include="Dapper" Version="2.1.66" />

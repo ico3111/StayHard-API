@@ -4,7 +4,7 @@ using System.Data;
 
 namespace StayHard.Application.Domains.Exercises.Queries;
 
-public class ExerciseRepository(IDbConnection db) : IExerciseRepository
+public class ExerciseQueries(IDbConnection db) : IExerciseQueries
 {
     private readonly IDbConnection _db = db;
     public async Task<int> AddAsync(Exercise exercise)
@@ -16,16 +16,7 @@ public class ExerciseRepository(IDbConnection db) : IExerciseRepository
         return await _db.QueryFirstOrDefaultAsync<int>(sqlExercise, exercise);
     }
 
-    public async Task<Exercise?> GetByIdAsync(int id)
-    {
-        var sqlExercises = "SELECT * FROM Exercises WHERE id = @Id;";
-
-        var exercise = await _db.QueryFirstOrDefaultAsync<Exercise>(sqlExercises, new { id });
-
-        return exercise;
-    }
-
-    public async Task<IEnumerable<Exercise>> GetExercisesByWorkoutIdAsync(int workoutId)
+    public async Task<IEnumerable<Exercise>> GetByWorkoutIdAsync(int workoutId)
     {
         var sqlExercises = "SELECT * FROM exercises WHERE workoutId = @WorkoutId;";
 
@@ -36,6 +27,16 @@ public class ExerciseRepository(IDbConnection db) : IExerciseRepository
 
         return exercises;
     }
+
+    public async Task<Exercise?> GetByIdAsync(int id)
+    {
+        var sqlExercises = "SELECT * FROM Exercises WHERE id = @Id;";
+
+        var exercise = await _db.QueryFirstOrDefaultAsync<Exercise>(sqlExercises, new { id });
+
+        return exercise;
+    }
+
 
     public async Task<IEnumerable<Exercise>> GetAllAsync()
     {

@@ -1,52 +1,50 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StayHard.Application.Domains.Workouts.Models.Commands;
-using StayHard.Application.Domains.Workouts.Services;
+using StayHard.Application.Domains.Workouts.Models.Entities;
+using StayHard.Application.Domains.Workouts.Queries;
 
 namespace StayHard.WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class WorkoutController : ControllerBase
+public class WorkoutController(IWorkoutQueries repository) : ControllerBase
 {
-    private readonly IWorkoutService _service;
-
-    public WorkoutController(IWorkoutService service)
-    {
-        _service = service;
-    }
+    private readonly IWorkoutQueries _repository = repository;
 
     [HttpPost("create")]
     public async Task<IActionResult> CreateWorkout([FromBody] WorkoutCommand command)
     {
-        var workout = await _service.CreateWorkoutAsync(command);
+        var workout = new Workout(command.Name, command.Description, command.Date, command.UserId);
+        var id = await _repository.AddAsync(workout);
+        workout.Id = id;
         return Ok(workout);
     }
 
     [HttpPost("attach/{workoutId}/{exerciseId}")]
     public async Task<IActionResult> AttachExercise(int workoutId, int exerciseId)
     {
-        await _service.AttachExerciseAsync(workoutId, exerciseId);
+        await _repository.AddExerciseAsync(workoutId, exerciseId);
         return Ok();
     }
 
     [HttpGet("user/{userId}")]
     public async Task<IActionResult> GetByUser(int userId)
     {
-        var workouts = await _service.GetUserWorkoutsAsync(userId);
+        var workouts = await _repository.GetByUserAsync(userId);
         return Ok(workouts);
     }
 
     [HttpGet("id/{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var workouts = await _service.GetWorkoutByIdAsync(id);
+        var workouts = await _repository.GetByIdAsync(id);
         return Ok(workouts);
     }
 
     [HttpGet("all")]
     public async Task<IActionResult> GetAll()
     {
-        var workouts = await _service.GetAllAsync();
+        var workouts = await _repository.GetAllAsync();
         return Ok(workouts);
     }
 }

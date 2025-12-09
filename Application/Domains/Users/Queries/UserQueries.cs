@@ -3,7 +3,7 @@ using System.Data;
 
 namespace StayHard.Application.Domains.Users.Queries;
 
-public class UserRepository(IDbConnection db) : IUserRepository
+public class UserQueries(IDbConnection db) : IUserQueries
 {
     private readonly IDbConnection _db = db;
 

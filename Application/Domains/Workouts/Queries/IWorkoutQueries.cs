@@ -2,7 +2,7 @@
 
 namespace StayHard.Application.Domains.Workouts.Queries;
 
-public interface IWorkoutRepository
+public interface IWorkoutQueries
 {
     Task<int> AddAsync(Workout workout);
     Task AddExerciseAsync(int workoutId, int exerciseId);

@@ -5,7 +5,7 @@ using System.Data;
 
 namespace StayHard.Application.Domains.Workouts.Queries;
 
-public class WorkoutRepository(IDbConnection db) : IWorkoutRepository
+public class WorkoutQueries(IDbConnection db) : IWorkoutQueries
 {
     private readonly IDbConnection _db = db;
 

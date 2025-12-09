@@ -20,7 +20,7 @@ public class User
         PasswordHash = passwordHash;
     }
 
-    public static string ReturnHashedPassword(string password)
+    public string ReturnHashedPassword(string password)
     {
         byte[] data = MD5.HashData(Encoding.UTF8.GetBytes(password));
         StringBuilder sBuilder = new StringBuilder();

@@ -1,6 +1,6 @@
 ﻿namespace StayHard.Application.Domains.Users.Queries;
 
-public interface IUserRepository
+public interface IUserQueries
 {
     Task<int> AddAsync(User user);
     Task<User?> GetByIdAsync(int id);
