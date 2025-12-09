@@ -1,8 +1,7 @@
 ﻿using Dapper;
-using StayHard.Domain.Interfaces;
 using System.Data;
 
-namespace StayHard.Infrastructure.Repositories;
+namespace StayHard.Application.Domains.Users.Queries;
 
 public class UserRepository(IDbConnection db) : IUserRepository
 {

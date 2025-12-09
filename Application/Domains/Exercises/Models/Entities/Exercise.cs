@@ -1,4 +1,4 @@
-﻿namespace StayHard.Domain.Entities;
+﻿namespace StayHard.Application.Domains.Exercises.Models.Entities;
 
 public class Exercise
 {

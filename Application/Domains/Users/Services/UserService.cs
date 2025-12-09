@@ -1,8 +1,7 @@
-﻿using StayHard.Application.Commands;
-using StayHard.Application.Interfaces;
-using StayHard.Domain.Interfaces;
+﻿using StayHard.Application.Domains.Users.Models.Commands;
+using StayHard.Application.Domains.Users.Queries;
 
-namespace StayHard.Application.Services;
+namespace StayHard.Application.Domains.Users.Services;
 
 public class UserService(IUserRepository repository) : IUserService
 {

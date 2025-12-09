@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace StayHard.Domain.Entities { }
+namespace StayHard.Application.Domains.Users.Models.Entities { }
 
 public class User
 {

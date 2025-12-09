@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Application\StayHard.Application.csproj" />
-    <ProjectReference Include="..\Infrastructure\StayHard.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

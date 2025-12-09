@@ -1,9 +1,8 @@
 ﻿using Dapper;
-using StayHard.Domain.Entities;
-using StayHard.Domain.Interfaces;
+using StayHard.Application.Domains.Exercises.Models.Entities;
 using System.Data;
 
-namespace StayHard.Infrastructure.Repositories;
+namespace StayHard.Application.Domains.Exercises.Queries;
 
 public class ExerciseRepository(IDbConnection db) : IExerciseRepository
 {

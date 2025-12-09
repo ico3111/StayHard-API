@@ -7,10 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StayHard.WebApi", "StayHard
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StayHard.Application", "Application\StayHard.Application.csproj", "{52602A0D-39C8-4A9C-80A7-307C8BDA66AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StayHard.Infrastructure", "Infrastructure\StayHard.Infrastructure.csproj", "{EF07AD93-E165-4141-85C0-1CECF3A9422E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StayHard.Domain", "StayHard.Domain\StayHard.Domain.csproj", "{A568FB8A-AEFA-4563-9DC6-ED469BEEFF42}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,14 +21,6 @@ Global
 		{52602A0D-39C8-4A9C-80A7-307C8BDA66AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52602A0D-39C8-4A9C-80A7-307C8BDA66AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52602A0D-39C8-4A9C-80A7-307C8BDA66AE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EF07AD93-E165-4141-85C0-1CECF3A9422E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF07AD93-E165-4141-85C0-1CECF3A9422E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EF07AD93-E165-4141-85C0-1CECF3A9422E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EF07AD93-E165-4141-85C0-1CECF3A9422E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A568FB8A-AEFA-4563-9DC6-ED469BEEFF42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A568FB8A-AEFA-4563-9DC6-ED469BEEFF42}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A568FB8A-AEFA-4563-9DC6-ED469BEEFF42}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A568FB8A-AEFA-4563-9DC6-ED469BEEFF42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

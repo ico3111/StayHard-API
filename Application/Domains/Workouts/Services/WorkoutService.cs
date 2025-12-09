@@ -1,9 +1,8 @@
-﻿using StayHard.Application.Commands;
-using StayHard.Application.Interfaces;
-using StayHard.Domain.Entities;
-using StayHard.Domain.Interfaces;
+﻿using StayHard.Application.Domains.Workouts.Models.Commands;
+using StayHard.Application.Domains.Workouts.Models.Entities;
+using StayHard.Application.Domains.Workouts.Queries;
 
-namespace StayHard.Application.Services;
+namespace StayHard.Application.Domains.Workouts.Services;
 
 public class WorkoutService(IWorkoutRepository repository) : IWorkoutService
 {

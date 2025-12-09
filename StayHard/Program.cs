@@ -1,8 +1,10 @@
 using MySqlConnector;
-using StayHard.Application.Interfaces;
-using StayHard.Application.Services;
-using StayHard.Domain.Interfaces;
-using StayHard.Infrastructure.Repositories;
+using StayHard.Application.Domains.Exercises.Queries;
+using StayHard.Application.Domains.Exercises.Services;
+using StayHard.Application.Domains.Users.Queries;
+using StayHard.Application.Domains.Users.Services;
+using StayHard.Application.Domains.Workouts.Queries;
+using StayHard.Application.Domains.Workouts.Services;
 using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);

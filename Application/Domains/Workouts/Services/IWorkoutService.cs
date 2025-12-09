@@ -1,7 +1,7 @@
-﻿using StayHard.Application.Commands;
-using StayHard.Domain.Entities;
+﻿using StayHard.Application.Domains.Workouts.Models.Commands;
+using StayHard.Application.Domains.Workouts.Models.Entities;
 
-namespace StayHard.Application.Interfaces;
+namespace StayHard.Application.Domains.Workouts.Services;
 
 public interface IWorkoutService
 {

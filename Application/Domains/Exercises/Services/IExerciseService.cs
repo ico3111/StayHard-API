@@ -1,7 +1,7 @@
-﻿using StayHard.Application.Commands;
-using StayHard.Domain.Entities;
+﻿using StayHard.Application.Domains.Exercises.Models.Commands;
+using StayHard.Application.Domains.Exercises.Models.Entities;
 
-namespace StayHard.Application.Interfaces;
+namespace StayHard.Application.Domains.Exercises.Services;
 
 public interface IExerciseService
 {

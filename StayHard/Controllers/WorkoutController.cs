@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StayHard.Application.Commands;
-using StayHard.Application.Interfaces;
+using StayHard.Application.Domains.Workouts.Models.Commands;
+using StayHard.Application.Domains.Workouts.Services;
 
 namespace StayHard.WebApi.Controllers;
 

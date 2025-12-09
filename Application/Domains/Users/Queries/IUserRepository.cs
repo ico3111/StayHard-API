@@ -1,6 +1,4 @@
-﻿using StayHard.Domain.Entities;
-
-namespace StayHard.Domain.Interfaces;
+﻿namespace StayHard.Application.Domains.Users.Queries;
 
 public interface IUserRepository
 {
@@ -9,4 +7,3 @@ public interface IUserRepository
     Task<User?> GetByEmailAsync(string email);
     Task<IEnumerable<User?>> GetAllAsync();
 }
-

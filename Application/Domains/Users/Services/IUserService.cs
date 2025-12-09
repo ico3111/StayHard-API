@@ -1,6 +1,6 @@
-﻿using StayHard.Application.Commands;
+﻿using StayHard.Application.Domains.Users.Models.Commands;
 
-namespace StayHard.Application.Interfaces;
+namespace StayHard.Application.Domains.Users.Services;
 
 public interface IUserService
 {

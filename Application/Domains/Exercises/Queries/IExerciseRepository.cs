@@ -1,6 +1,6 @@
-﻿using StayHard.Domain.Entities;
+﻿using StayHard.Application.Domains.Exercises.Models.Entities;
 
-namespace StayHard.Domain.Interfaces;
+namespace StayHard.Application.Domains.Exercises.Queries;
 
 public interface IExerciseRepository
 {
