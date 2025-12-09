@@ -9,44 +9,56 @@ public class ExerciseQueries(IDbConnection db) : IExerciseQueries
     private readonly IDbConnection _db = db;
     public async Task<int> AddAsync(Exercise exercise)
     {
-        var sqlExercise = @"INSERT INTO exercises (name, sets, reps) 
-                            VALUES (@Name, @Sets, @Reps);
-                            SELECT LAST_INSERT_ID();";
+        var sqlExercise = @"INSERT INTO exercises (name, sets, reps, user_id) 
+                                 VALUES (@Name, @Sets, @Reps, @UserId);
+                                 SELECT LAST_INSERT_ID();";
 
         return await _db.QueryFirstOrDefaultAsync<int>(sqlExercise, exercise);
     }
 
-    public async Task<IEnumerable<Exercise>> GetByWorkoutIdAsync(int workoutId)
-    {
-        var sqlExercises = "SELECT * FROM exercises WHERE workoutId = @WorkoutId;";
-
-        var exercises = (await _db.QueryAsync<Exercise>(
-            sqlExercises,
-            new { workoutId }
-        )).ToList();
-
-        return exercises;
-    }
-
     public async Task<Exercise?> GetByIdAsync(int id)
     {
-        var sqlExercises = "SELECT * FROM Exercises WHERE id = @Id;";
+        var sqlExercises = @"SELECT * 
+                               FROM Exercises 
+                              WHERE id = @Id;";
 
         var exercise = await _db.QueryFirstOrDefaultAsync<Exercise>(sqlExercises, new { id });
 
         return exercise;
     }
 
-
     public async Task<IEnumerable<Exercise>> GetAllAsync()
     {
-        var sqlExercise = "SELECT * FROM exercises;";
+        var sqlExercise = @"SELECT * 
+                              FROM exercises";
 
         var exercises = (await _db.QueryAsync<Exercise>(
             sqlExercise
+        )).ToList();
+
+        return exercises;
+    }
+
+    public async Task<IEnumerable<Exercise>> GetByUserIdAsync(int userId)
+    {
+        var sqlExercise = @"SELECT * 
+                              FROM exercises
+                             WHERE user_id = @UserId";
+
+        var exercises = (await _db.QueryAsync<Exercise>(
+            sqlExercise, new {userId}
         )).ToList() ;
 
         return exercises;
+    }
+
+    public async Task DeleteByIdAsync(int id)
+    {
+        var sqlExercise = @"DELETE 
+                              FROM exercises
+                             WHERE id = @Id";
+
+        await _db.ExecuteAsync(sqlExercise, new { id });
     }
 
 }

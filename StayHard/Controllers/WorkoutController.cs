@@ -47,4 +47,11 @@ public class WorkoutController(IWorkoutQueries repository) : ControllerBase
         var workouts = await _repository.GetAllAsync();
         return Ok(workouts);
     }
+
+    [HttpDelete("delete/{id}")]
+    public async Task<IActionResult> DeletebyId(int id)
+    {
+        await _repository.DeleteByIdAsync(id);
+        return Ok();
+    }
 }

@@ -6,13 +6,15 @@ public class Exercise
     public string Name { get; private set; }
     public int Sets { get; private set; }
     public int Reps { get; private set; }
+    public int UserId { get; private set; }
 
     public Exercise() { }
 
-    public Exercise(string name, int sets, int reps) {
+    public Exercise(string name, int sets, int reps, int userId) {
         Name = name;
         Sets = sets;
         Reps = reps;
+        UserId = userId;
     }
 
 

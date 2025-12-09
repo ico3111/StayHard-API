@@ -96,5 +96,12 @@ public class WorkoutQueries(IDbConnection db) : IWorkoutQueries
 
         return workouts;
     }
-
+    
+    public async Task DeleteByIdAsync(int id)
+    {
+        var sqlWorkout = @"DELETE
+                             FROM workouts 
+                            WHERE id = @Id";
+        await _db.ExecuteAsync(sqlWorkout, new {Id = id});
+    }
 }

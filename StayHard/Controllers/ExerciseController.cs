@@ -13,17 +13,10 @@ public class ExerciseController(IExerciseService service, IExerciseQueries repos
     private readonly IExerciseQueries _repository = repository;
 
     [HttpPost("create")]
-    public async Task<IActionResult> CreateExercise([FromBody] ExerciseCommand dto)
+    public async Task<IActionResult> CreateExercise([FromBody] ExerciseCommand command)
     {
-        var exercise = await _service.CreateExerciseAsync(dto);
+        var exercise = await _service.CreateExerciseAsync(command);
         return Ok(exercise);
-    }
-
-    [HttpGet("workout/{workoutId}")]
-    public async Task<IActionResult> GetByWorkout(int workoutId)
-    {
-        var exercises = await _repository.GetByWorkoutIdAsync(workoutId);
-        return Ok(exercises);
     }
 
     [HttpGet("id/{id}")]
@@ -38,5 +31,19 @@ public class ExerciseController(IExerciseService service, IExerciseQueries repos
     {
         var exercises = await _repository.GetAllAsync();
         return Ok(exercises);
+    }
+
+    [HttpGet("user/{userId}")]
+    public async Task<IActionResult> GetByUserIdAsync(int userId)
+    {
+        var exercises = await _repository.GetByUserIdAsync(userId);
+        return Ok(exercises);
+    }
+
+    [HttpDelete("delete/{id}")]
+    public async Task<IActionResult> DeleteByIdAsync(int id)
+    {
+        await _repository.DeleteByIdAsync(id);
+        return Ok();
     }
 }

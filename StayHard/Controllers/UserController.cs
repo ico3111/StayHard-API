@@ -41,4 +41,11 @@ public class UserController(IUserQueries repository) : ControllerBase
         var users = await _repository.GetAllAsync();
         return Ok(users);
     }
+
+    [HttpDelete("delete/{id}")]
+    public async Task<IActionResult> DeleteByIdAsync(int id)
+    {
+        await _repository.DeleteByIdAsync(id);
+        return Ok();
+    }
 }

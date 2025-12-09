@@ -12,7 +12,7 @@ public class ExerciseService(IExerciseQueries ExerciseQueries, IWorkoutQueries W
 
     public async Task<Exercise> CreateExerciseAsync(ExerciseCommand command)
     {
-        var exercise = new Exercise(command.Name, command.Sets, command.Reps);
+        var exercise = new Exercise(command.Name, command.Sets, command.Reps, command.UserId);
         var exerciseId = await _ExerciseQueries.AddAsync(exercise);
         if (command.WorkoutId != 0)
         {

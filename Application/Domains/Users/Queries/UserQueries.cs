@@ -30,7 +30,7 @@ public class UserQueries(IDbConnection db) : IUserQueries
         var sqlUser = "SELECT * FROM users WHERE email = @Email;";
 
         var user = await _db.QueryFirstOrDefaultAsync<User>(sqlUser, new { email });
-      
+
         return user;
     }
 
@@ -41,6 +41,15 @@ public class UserQueries(IDbConnection db) : IUserQueries
         var users = (await _db.QueryAsync<User>(sqlUsers)).ToList();
 
         return users;
+    }
+
+    public async Task DeleteByIdAsync(int id)
+    {
+        var sqlUsers = @"DELETE 
+                           FROM users
+                          WHERE id = @Id";
+
+        await _db.ExecuteAsync(sqlUsers, new { id });
     }
 
 }

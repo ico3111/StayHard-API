@@ -9,6 +9,6 @@ public interface IWorkoutQueries
     Task<Workout?> GetByIdAsync(int id);
     Task<IEnumerable<Workout>> GetByUserAsync(int UserId);
     Task<IEnumerable<Workout?>> GetAllAsync();
-    
+    Task DeleteByIdAsync(int id);
 }
 
