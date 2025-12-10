@@ -20,7 +20,7 @@ public class WorkoutController(IWorkoutQueries repository) : ControllerBase
         return Ok(workout);
     }
 
-    [HttpPost("attach/{workoutId}/{exerciseId}")]
+    [HttpGet("attach/{workoutId}/{exerciseId}")]
     public async Task<IActionResult> AttachExercise(int workoutId, int exerciseId)
     {
         await _repository.AddExerciseAsync(workoutId, exerciseId);
