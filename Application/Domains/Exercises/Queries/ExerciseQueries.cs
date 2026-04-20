@@ -19,7 +19,7 @@ public class ExerciseQueries(IDbConnection db) : IExerciseQueries
     public async Task<Exercise?> GetByIdAsync(int id)
     {
         var sqlExercises = @"SELECT * 
-                               FROM Exercises 
+                               FROM exercises 
                               WHERE id = @Id;";
 
         var exercise = await _db.QueryFirstOrDefaultAsync<Exercise>(sqlExercises, new { id });
