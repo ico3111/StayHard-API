@@ -12,7 +12,7 @@ public class UserService(IUserQueries repository) : IUserService
 {
     private readonly IUserQueries _repository = repository;
 
-    public async Task<string> Login(UserCommand command)
+    public async Task<string> GetToken(UserCommand command)
     {
         var userDB = await _repository.GetByEmailAsync(command.Email);
 
@@ -50,5 +50,12 @@ public class UserService(IUserQueries repository) : IUserService
         );
 
         return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
+    }
+
+    public async Task<User?> GetUserData(string email)
+    {
+        var user = await _repository.GetByEmailAsync(email);
+
+        return user;
     }
 }

@@ -14,10 +14,12 @@ public class AuthController(IUserService services) : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] UserCommand command)
     {
-        string token = await _services.Login(command);
+        string token = await _services.GetToken(command);
 
         if (string.IsNullOrEmpty(token))
             return Unauthorized();
+
+        var userData = await _services.GetUserData(command.Email);
 
         var cookieOptions = new CookieOptions
         {
@@ -29,7 +31,7 @@ public class AuthController(IUserService services) : ControllerBase
 
         Response.Cookies.Append("stay-hard-auth", token, cookieOptions);
 
-        return Ok();
+        return Ok(new { id = userData?.Id, name = userData?.Name, email = userData?.Email });
     }
 
     [Authorize]
