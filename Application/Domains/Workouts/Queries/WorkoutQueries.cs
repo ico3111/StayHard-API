@@ -11,7 +11,7 @@ public class WorkoutQueries(IDbConnection db) : IWorkoutQueries
 
     public async Task<int> AddAsync(Workout workout)
     {
-        var sql = @"INSERT INTO Workouts (name, description, date, userId)
+        var sql = @"INSERT INTO workouts (name, description, date, userId)
                          VALUES (@Name, @Description, @Date, @UserId);
                          SELECT LAST_INSERT_ID();";
 
@@ -29,7 +29,7 @@ public class WorkoutQueries(IDbConnection db) : IWorkoutQueries
 
     public async Task<Workout?> GetByIdAsync(int id)
     {
-        var sqlWorkout = "SELECT * FROM Workouts WHERE id = @Id;";
+        var sqlWorkout = "SELECT * FROM workouts WHERE id = @Id;";
         var sqlExercises = @"SELECT exercises.*
                                FROM exercises 
                                JOIN workout_exercise
