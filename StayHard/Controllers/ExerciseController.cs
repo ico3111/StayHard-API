@@ -14,20 +14,6 @@ public class ExerciseController(IExerciseService service, IExerciseQueries repos
     private readonly IExerciseService _service = service;
     private readonly IExerciseQueries _repository = repository;
 
-    [HttpPost("create")]
-    public async Task<IActionResult> CreateExercise([FromBody] ExerciseCommand command)
-    {
-        var exercise = await _service.CreateExerciseAsync(command);
-        return Ok(exercise);
-    }
-
-    [HttpGet("id/{id}")]
-    public async Task<IActionResult> GetById(int id)
-    {
-        var exercises = await _repository.GetByIdAsync(id);
-        return Ok(exercises);
-    }
-
     [HttpGet("all")]
     public async Task<IActionResult> GetAll()
     {
@@ -35,17 +21,31 @@ public class ExerciseController(IExerciseService service, IExerciseQueries repos
         return Ok(exercises);
     }
 
-    [HttpGet("user/{userId}")]
-    public async Task<IActionResult> GetByUserIdAsync(int userId)
+    [HttpGet("id/{id}")]
+    public async Task<IActionResult> Get(int id)
     {
-        var exercises = await _repository.GetByUserIdAsync(userId);
+        var exercises = await _repository.GetAsync(id);
         return Ok(exercises);
     }
 
-    [HttpDelete("delete/{id}")]
-    public async Task<IActionResult> DeleteByIdAsync(int id)
+    [HttpGet("user/{userId}")]
+    public async Task<IActionResult> GetByUser(int userId)
     {
-        await _repository.DeleteByIdAsync(id);
+        var exercises = await _repository.GetByUserAsync(userId);
+        return Ok(exercises);
+    }
+
+    [HttpPost("create")]
+    public async Task<IActionResult> Create([FromBody] ExerciseCommand command)
+    {
+        var exercise = await _service.CreateExerciseAsync(command);
+        return Ok(exercise);
+    }
+
+    [HttpDelete("delete/{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        await _repository.DeleteAsync(id);
         return Ok();
     }
 }

@@ -10,12 +10,11 @@ public class Exercise
 
     public Exercise() { }
 
-    public Exercise(string name, int sets, int reps, int userId) {
+    public Exercise(string name, int sets, int reps, int userId)
+    {
         Name = name;
         Sets = sets;
         Reps = reps;
         UserId = userId;
     }
-
-
 }

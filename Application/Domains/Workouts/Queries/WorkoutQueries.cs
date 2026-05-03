@@ -9,25 +9,31 @@ public class WorkoutQueries(IDbConnection db) : IWorkoutQueries
 {
     private readonly IDbConnection _db = db;
 
-    public async Task<int> AddAsync(Workout workout)
+    public async Task<IEnumerable<Workout?>> GetAllAsync()
     {
-        var sql = @"INSERT INTO workouts (name, description, date, userId)
-                         VALUES (@Name, @Description, @Date, @UserId);
-                         SELECT LAST_INSERT_ID();";
+        var sqlWorkouts = "SELECT * FROM workouts";
+        var sqlExercises = @"SELECT exercises.*
+                               FROM exercises 
+                               JOIN workout_exercise
+                                 ON workout_exercise.exerciseId = exercises.id
+                              WHERE workout_exercise.workoutId = @WorkoutId;";
 
-        return await _db.QueryFirstOrDefaultAsync<int>(sql, workout);
+        var workouts = (await _db.QueryAsync<Workout>(sqlWorkouts)).ToList();
+
+        if (workouts == null) return Enumerable.Empty<Workout>();
+
+        foreach (var workout in workouts)
+        {
+            workout.Exercises = (await _db.QueryAsync<Exercise>(
+                sqlExercises,
+                new { workoutId = workout.Id }
+            )).ToList();
+        }
+
+        return workouts;
     }
 
-    public async Task AddExerciseAsync(int workoutId, int exerciseId)
-    {
-        var sql = @"INSERT INTO workout_exercise (workoutId, exerciseId)
-                         VALUES (@WorkoutId, @ExerciseId);";
-
-        await _db.ExecuteAsync(sql, new { workoutId, exerciseId }); 
-    
-    }
-
-    public async Task<Workout?> GetByIdAsync(int id)
+    public async Task<Workout?> GetAsync(int id)
     {
         var sqlWorkout = "SELECT * FROM workouts WHERE id = @Id;";
         var sqlExercises = @"SELECT exercises.*
@@ -73,35 +79,28 @@ public class WorkoutQueries(IDbConnection db) : IWorkoutQueries
         return workouts;
     }
 
-    public async Task<IEnumerable<Workout?>> GetAllAsync()
+    public async Task<int> AddAsync(Workout workout)
     {
-        var sqlWorkouts = "SELECT * FROM workouts";
-        var sqlExercises = @"SELECT exercises.*
-                               FROM exercises 
-                               JOIN workout_exercise
-                                 ON workout_exercise.exerciseId = exercises.id
-                              WHERE workout_exercise.workoutId = @WorkoutId;";
+        var sql = @"INSERT INTO workouts (name, description, date, userId)
+                         VALUES (@Name, @Description, @Date, @UserId);
+                         SELECT LAST_INSERT_ID();";
 
-        var workouts = (await _db.QueryAsync<Workout>(sqlWorkouts)).ToList();
-
-        if (workouts == null) return Enumerable.Empty<Workout>();
-
-        foreach (var workout in workouts)
-        {
-            workout.Exercises = (await _db.QueryAsync<Exercise>(
-                sqlExercises,
-                new { workoutId = workout.Id }
-            )).ToList();
-        }
-
-        return workouts;
+        return await _db.QueryFirstOrDefaultAsync<int>(sql, workout);
     }
-    
-    public async Task DeleteByIdAsync(int id)
+
+    public async Task DeleteAsync(int id)
     {
         var sqlWorkout = @"DELETE
                              FROM workouts 
                             WHERE id = @Id";
-        await _db.ExecuteAsync(sqlWorkout, new {Id = id});
+        await _db.ExecuteAsync(sqlWorkout, new { Id = id });
+    }
+
+    public async Task AddExerciseAsync(int workoutId, int exerciseId)
+    {
+        var sql = @"INSERT INTO workout_exercise (workoutId, exerciseId)
+                         VALUES (@WorkoutId, @ExerciseId);";
+
+        await _db.ExecuteAsync(sql, new { workoutId, exerciseId });
     }
 }

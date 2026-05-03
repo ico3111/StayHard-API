@@ -13,20 +13,18 @@ public class WorkoutController(IWorkoutQueries repository) : ControllerBase
 {
     private readonly IWorkoutQueries _repository = repository;
 
-    [HttpPost("create")]
-    public async Task<IActionResult> CreateWorkout([FromBody] WorkoutCommand command)
+    [HttpGet("all")]
+    public async Task<IActionResult> GetAll()
     {
-        var workout = new Workout(command.Name, command.Description, command.Date, command.UserId);
-        var id = await _repository.AddAsync(workout);
-        workout.Id = id;
-        return Ok(workout);
+        var workouts = await _repository.GetAllAsync();
+        return Ok(workouts);
     }
 
-    [HttpGet("attach/{workoutId}/{exerciseId}")]
-    public async Task<IActionResult> AttachExercise(int workoutId, int exerciseId)
+    [HttpGet("id/{id}")]
+    public async Task<IActionResult> Get(int id)
     {
-        await _repository.AddExerciseAsync(workoutId, exerciseId);
-        return Ok();
+        var workouts = await _repository.GetAsync(id);
+        return Ok(workouts);
     }
 
     [HttpGet("user/{userId}")]
@@ -36,24 +34,26 @@ public class WorkoutController(IWorkoutQueries repository) : ControllerBase
         return Ok(workouts);
     }
 
-    [HttpGet("id/{id}")]
-    public async Task<IActionResult> GetById(int id)
+    [HttpPost("create")]
+    public async Task<IActionResult> Create([FromBody] WorkoutCommand command)
     {
-        var workouts = await _repository.GetByIdAsync(id);
-        return Ok(workouts);
-    }
-
-    [HttpGet("all")]
-    public async Task<IActionResult> GetAll()
-    {
-        var workouts = await _repository.GetAllAsync();
-        return Ok(workouts);
+        var workout = new Workout(command.Name, command.Description, command.Date, command.UserId);
+        var id = await _repository.AddAsync(workout);
+        workout.Id = id;
+        return Ok(workout);
     }
 
     [HttpDelete("delete/{id}")]
-    public async Task<IActionResult> DeletebyId(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        await _repository.DeleteByIdAsync(id);
+        await _repository.DeleteAsync(id);
+        return Ok();
+    }
+
+    [HttpGet("attach/{workoutId}/{exerciseId}")]
+    public async Task<IActionResult> AttachExercise(int workoutId, int exerciseId)
+    {
+        await _repository.AddExerciseAsync(workoutId, exerciseId);
         return Ok();
     }
 }

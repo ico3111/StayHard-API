@@ -1,5 +1,6 @@
-﻿using Dapper;
+﻿using StayHard.Application.Domains.Users.Models.Entities;
 using System.Data;
+using Dapper;
 
 namespace StayHard.Application.Domains.Users.Queries;
 
@@ -7,16 +8,16 @@ public class UserQueries(IDbConnection db) : IUserQueries
 {
     private readonly IDbConnection _db = db;
 
-    public async Task<int> AddAsync(User user)
+    public async Task<IEnumerable<User?>> GetAllAsync()
     {
-        var sqlUser = @"INSERT INTO users (name, email, passwordHash) 
-                             VALUES (@name, @email, @passwordHash);
-                             SELECT LAST_INSERT_ID();";
+        var sqlUsers = "SELECT * FROM users";
 
-        return await _db.QueryFirstOrDefaultAsync<int>(sqlUser, user);
+        var users = (await _db.QueryAsync<User>(sqlUsers)).ToList();
+
+        return users;
     }
 
-    public async Task<User?> GetByIdAsync(int id)
+    public async Task<User?> GetAsync(int id)
     {
         var sqlUser = "SELECT * FROM users WHERE id = @Id;";
 
@@ -34,16 +35,16 @@ public class UserQueries(IDbConnection db) : IUserQueries
         return user;
     }
 
-    public async Task<IEnumerable<User?>> GetAllAsync()
+    public async Task<int> AddAsync(User user)
     {
-        var sqlUsers = "SELECT * FROM users";
+        var sqlUser = @"INSERT INTO users (name, email, passwordHash) 
+                             VALUES (@name, @email, @passwordHash);
+                             SELECT LAST_INSERT_ID();";
 
-        var users = (await _db.QueryAsync<User>(sqlUsers)).ToList();
-
-        return users;
+        return await _db.QueryFirstOrDefaultAsync<int>(sqlUser, user);
     }
 
-    public async Task DeleteByIdAsync(int id)
+    public async Task DeleteAsync(int id)
     {
         var sqlUsers = @"DELETE 
                            FROM users

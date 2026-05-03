@@ -4,10 +4,10 @@ namespace StayHard.Application.Domains.Exercises.Queries;
 
 public interface IExerciseQueries
 {
-    Task<Exercise?> GetByIdAsync(int id);
+    Task<IEnumerable<Exercise>> GetAllAsync();
+    Task<Exercise?> GetAsync(int id);
+    Task<IEnumerable<Exercise>> GetByUserAsync(int userId);
     Task<int> AddAsync(Exercise exercise);
-    Task<IEnumerable<Exercise>> GetAllAsync();    
-    Task<IEnumerable<Exercise>> GetByUserIdAsync(int userId);
-    Task DeleteByIdAsync(int id);
+    Task DeleteAsync(int id);
 }
 

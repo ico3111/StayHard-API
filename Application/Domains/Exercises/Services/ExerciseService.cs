@@ -21,5 +21,4 @@ public class ExerciseService(IExerciseQueries ExerciseQueries, IWorkoutQueries W
         exercise.Id = exerciseId;
         return exercise;
     }
-
 }

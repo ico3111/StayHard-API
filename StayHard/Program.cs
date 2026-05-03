@@ -4,6 +4,7 @@ using MySqlConnector;
 using StayHard.Application.Domains.Exercises.Queries;
 using StayHard.Application.Domains.Exercises.Services;
 using StayHard.Application.Domains.Users.Queries;
+using StayHard.Application.Domains.Users.Services;
 using StayHard.Application.Domains.Workouts.Queries;
 using System.Data;
 using System.Text;
@@ -18,18 +19,6 @@ builder.Services.AddTransient<IDbConnection>(sp =>
     );
 
     return conn;
-});
-
-// Configuração de CORS
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("StayHardPolicy", policy =>
-    {
-        policy.WithOrigins("http://localhost:3000")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
-    });
 });
 
 // Configuração de Autenticação
@@ -55,13 +44,26 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+// Configuração de CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("StayHardPolicy", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 builder.Services.AddAuthorization();
 
 // Injeção de dependências
 builder.Services.AddScoped<IWorkoutQueries, WorkoutQueries>();
-builder.Services.AddScoped<IExerciseService, ExerciseService>();
 builder.Services.AddScoped<IExerciseQueries, ExerciseQueries>();
 builder.Services.AddScoped<IUserQueries, UserQueries>();
+builder.Services.AddScoped<IExerciseService, ExerciseService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
