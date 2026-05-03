@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StayHard.Application.Domains.Exercises.Models.Commands;
 using StayHard.Application.Domains.Exercises.Queries;
 using StayHard.Application.Domains.Exercises.Services;
 
 namespace StayHard.WebApi.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class ExerciseController(IExerciseService service, IExerciseQueries repository) : ControllerBase

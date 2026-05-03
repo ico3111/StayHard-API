@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StayHard.Application.Domains.Workouts.Models.Commands;
 using StayHard.Application.Domains.Workouts.Models.Entities;
 using StayHard.Application.Domains.Workouts.Queries;
 
 namespace StayHard.WebApi.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class WorkoutController(IWorkoutQueries repository) : ControllerBase
